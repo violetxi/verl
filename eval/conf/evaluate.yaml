@@ -1,0 +1,16 @@
+dataset_id: HuggingFaceH4/MATH-500
+split: test
+start_idx: 0
+end_idx: 10
+
+model_id: RLAIF/sft_tir_rl_prep_lr1e-05_bs4_ga8_wd0.0_wp0.1_checkpoint-epoch4
+dp_size: 2
+
+n_samples: 1
+sampling_params:
+  temperature: 0
+  max_new_tokens: 16384
+  n: 1
+  stop: ["```output", "``` output", "```\noutput", "```Output", "``` Output", "```\nOutput"]
+
+n_interactions: 10

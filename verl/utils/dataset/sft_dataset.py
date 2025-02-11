@@ -56,8 +56,10 @@ class SFTDataset(Dataset):
             tokenizer = hf_tokenizer(tokenizer)
         self.tokenizer: PreTrainedTokenizer = tokenizer
 
-        self.prompt_key = prompt_key if isinstance(prompt_key, (tuple, list)) else [prompt_key]
-        self.response_key = response_key if isinstance(response_key, (tuple, list)) else [response_key]
+        # self.prompt_key = prompt_key if isinstance(prompt_key, (tuple, list)) else [prompt_key]
+        # self.response_key = response_key if isinstance(response_key, (tuple, list)) else [response_key]
+        self.prompt_key = prompt_key
+        self.response_key = response_key
         self.prompt_dict_keys = [] if not prompt_dict_keys else prompt_dict_keys
         self.response_dict_keys = [] if not response_dict_keys else response_dict_keys
 
@@ -83,8 +85,9 @@ class SFTDataset(Dataset):
             # read parquet files and cache
             dataframe = pd.read_parquet(parquet_file)
             dataframes.append(dataframe)
-        self.dataframe = pd.concat(dataframes)
+        self.dataframe = pd.concat(dataframes)        
         self.prompts = self.dataframe[self.prompt_key]
+        
         for key in self.prompt_dict_keys:
             # type(x): pandas.core.series.Series
             # type(x[0]): numpy.ndarray
@@ -94,6 +97,7 @@ class SFTDataset(Dataset):
             except Exception:
                 print(f'self.prompts={self.prompts}')
                 raise
+        
         self.prompts = self.prompts.tolist()
         self.responses = self.dataframe[self.response_key]
         for key in self.response_dict_keys:
@@ -114,10 +118,10 @@ class SFTDataset(Dataset):
         response = self.responses[item]
 
         # apply chat template
-        prompt_chat = [{'role': 'user', 'content': prompt}]
+        # prompt_chat = [{'role': 'user', 'content': prompt}]
 
         # string
-        prompt_chat_str = tokenizer.apply_chat_template(prompt_chat, add_generation_prompt=True, tokenize=False)
+        prompt_chat_str = prompt #tokenizer.apply_chat_template(prompt_chat, add_generation_prompt=True, tokenize=False)
         response_chat_str = response + tokenizer.eos_token
 
         # tokenize

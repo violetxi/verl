@@ -6,12 +6,12 @@ data:
   val_files: ~/data/gsm8k/test.parquet
   prompt_key: question
   response_key: answer
-  max_length: 1024
+  max_length: 16384
   truncation: error
   balance_dp_token: False
   chat_template: null
 model:
-  partial_pretrain: ~/models/gemma-1.1-7b-it
+  partial_pretrain: ~/models/llama-3.1-8b-tir
   fsdp_config:
     wrap_policy:
       min_num_params: 0
@@ -33,13 +33,13 @@ optim:
 ulysses_sequence_parallel_size: 1
 use_remove_padding: False
 trainer:
-  default_local_dir: /tmp/sft_model
-  default_hdfs_dir: hdfs://tmp/experiments/gsm8k/gemma-1.1-7b-it/ # change the hdfs path here
+  default_local_dir: /home/violet/sft_model
+  default_hdfs_dir: hdfs://home/violet//experiments/tir/llama-3.1-8b-tir # change the hdfs path here
   resume_path: null
-  project_name: gsm8k-sft
+  project_name: numina-tir-sft
   experiment_name: test
   total_epochs: 4
   total_training_steps: null
-  logger: ['console']
+  logger: ['console', 'wandb']
   seed: 1
 
